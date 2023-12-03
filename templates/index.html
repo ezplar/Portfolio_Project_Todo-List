@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    {{ bootstrap.load_css() }}
+    <meta charset="UTF-8">
+    <title>Ezplar Todo List</title>
+</head>
+
+<body>
+<section class="p-3 text-bg-dark top">
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-light me-2">Login</button>
+          <button type="button" class="btn btn-warning">New-List</button>
+        </div>
+      </div>
+    </div>
+</section>
+
+<header class="py-3 mb-4 border-bottom">
+    <div class="d-flex flex-wrap justify-content-center">
+        {% if check_id == [] %}
+        <h1>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+            <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
+            <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
+            </svg>
+            <!-- Reseacrch Span tag, edit upon double click, if statement, no task appears logo, with task or primary_key = 1, insert date today-->
+        </span>
+        </h1>
+        {% elif check_id[0] == 1 or 2 %}
+        <h1>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+            <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
+            <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
+            </svg>
+            <form method="post" action="{{ url_for('change_todolist_name') }}">
+                <input name="todolist-title" value="{{ todo_text }} - {{ today_date }}" style="width: 150%; height: 50%; border: 0;">
+                <input type="submit" hidden tabindex="-1"/>
+            </form>
+            <!-- My TODO List {{ today_date }} -->
+            <!-- Reseacrch Span tag, edit upon double click, if statement, no task appears logo, with task or primary_key = 1, insert date today-->
+        </span>
+        </h1>
+        {% endif %}
+
+    </div>
+</header>
+
+    <div class="d-flex flex-wrap justify-content-center">
+        <h2>
+        <span>
+            Create/Input your to-do list below:
+            <!-- Reseacrch Span tag, edit upon double click, if statement, no task appears logo, with task or primary_key = 1, insert date today-->
+        </span>
+        </h2>
+    </div>
+
+
+<div id="task-input">
+    <!-- Text input modification and style -->
+    <form name="task-enter" method="post" action=" {{ url_for('main') }} ">
+    <input autofocus="autofocus" autocomplete="off" placeholder="Input your Task." required="required" type="text" value="" name="task-value" style="width: 100%; border: 0; background: transparent; outline: none; font-size: 36px; box-sizing: border-box; padding: 15px 40px;"/>
+    <input type="submit" hidden tabindex="-1"/>
+    </form>
+</div>
+
+<div id="task-list-output">
+    {% for tk in task_items %}
+        <div class="col border-top border-bottom" style="font-size: 22px; padding: 20px;">
+            <ul style="margin: 0; padding: 0; list-style: none; float: left">
+                        <!-- Onchange o onlick on checkbox to update completed task to boolean -->
+                        {% if tk.completed_task == 0 %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+                            <path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
+                            </svg>
+                        {% endif %}
+
+                        <form name="completed_task" method="post" action="{{ url_for('completed_task', task_id = tk.id, c_id = 0) }}" >
+                        {% if tk.completed_task == 1 %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                            <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                            <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                            </svg>
+                        {% endif %}
+                        </form>
+            </ul>
+
+                 {{ tk.task_name }}
+                -- Date: {{ tk.date }} --
+                <ul style="margin: 0; padding: 0; list-style: none; float: right">
+                    <li class="delete-tasks">
+                        <a href="{{ url_for('delete', task_id = tk.id) }}" name="delete-task">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul style="margin-top: 4.5px; margin-right: 4px; padding: 0; list-style: none; float: right">
+                    <li class="modify-tasks">
+                        <form name="completed_task" method="post" action="{{ url_for('completed_task', task_id = tk.id, c_id = 1) }}" >
+                        {% if tk.completed_task == 0 %}
+                            <input type="image" name="completed_check" value="Complete" src="{{ url_for('static', filename='images/check-circle.svg') }}">
+                        {% endif %}
+                        </form>
+
+                        <form name="completed_task" method="post" action="{{ url_for('completed_task', task_id = tk.id, c_id = 0) }}" >
+                        {% if tk.completed_task == 1 %}
+                            <input type="image" name="completed_check" value="Undo Task Completion" src="{{ url_for('static', filename='images/arrow-counterclockwise.svg') }}">
+                        {% endif %}
+                        </form>
+                    </li>
+                </ul>
+
+
+        </div>
+    {% endfor %}
+</div>
+
+
+</body>
+</html>
